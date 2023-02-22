@@ -1,4 +1,8 @@
 import sqlite3
+import logging
+import json
+import datetime
+import sys
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
@@ -18,9 +22,15 @@ def get_post(post_id):
     connection.close()
     return post
 
+def count_connection(conn, action):
+    countConn = conn.execute('INSERT INTO dbconn (action, connect) VALUES (?, ?)',
+                (action, True))
+
 # Define the Flask application
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
+
+dateandtime = datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')
 
 # Define the main route of the web application 
 @app.route('/')
@@ -36,13 +46,16 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      return render_template('404.html'), 404
+        app.logger.info(dateandtime + ", Article with id=" + str(post_id) + " is not found. 404 Page is returned.")
+        return render_template('404.html'), 404
     else:
-      return render_template('post.html', post=post)
+        app.logger.info(dateandtime + ', Article "' + post['title'] + '" retrieved!')
+        return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.info(dateandtime + ', About Us page is retrieved!')
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -60,11 +73,44 @@ def create():
                          (title, content))
             connection.commit()
             connection.close()
-
+            app.logger.info(dateandtime + ', New Article "'+ title + '" is created!')
             return redirect(url_for('index'))
 
     return render_template('create.html')
 
+# Define Healthcheck endpoint
+@app.route('/healtz')
+def healtz():
+    response = app.response_class(
+        response=json.dumps({
+            "result": "OK-Healthy"
+        }),
+        status=200,
+        mimetype='application/json'
+    )
+    app.logger.info(dateandtime + ', Healthz Endpoint request is succcess')
+    return response
+
+# Define Healthcheck endpoint
+@app.route('/metrics')
+def metrics():
+    connection = get_db_connection()
+    allPost = connection.execute('SELECT COUNT(*) as totalPost FROM posts').fetchall()
+    connectionCount = connection.execute("SELECT COUNT(*) as totalCount FROM sqlite_master WHERE type='table'").fetchall()
+    connection.close()
+    response = app.response_class(
+        response=json.dumps({
+            "db_connection_count": connectionCount[0]['totalCount'],
+            "post_count": allPost[0]['totalPost']
+        }),
+        status=200,
+        mimetype='application/json'
+    )
+    app.logger.info(dateandtime + ', Metrics Endpoint request is succcess.')
+    return response
+
 # start the application on port 3111
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port='3111')
+    logging.basicConfig(filename='app.log', level=logging.DEBUG)
+    logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+    app.run(host='0.0.0.0', port='3111')
