@@ -79,8 +79,8 @@ def create():
     return render_template('create.html')
 
 # Define Healthcheck endpoint
-@app.route('/healtz')
-def healtz():
+@app.route('/healthz')
+def healthz():
     response = app.response_class(
         response=json.dumps({
             "result": "OK-Healthy"

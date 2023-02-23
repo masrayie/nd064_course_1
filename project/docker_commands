@@ -1,11 +1,43 @@
 ## Docker commands used to build the application 
 # TODO: insert the docker build command
+docker build -t techtrends .
 
 ## Docker commands used to run the application
 # TODO: insert the docker run command
+docker run -d -p 7111:3111 techtrends
 
 ## Docker commands used to get the application logs
 # TODO: insert the docker logs command
+docker ps -a
+docker logs 
 
 ## Logs from the container running the TechTrends application
 # TODO: paste logs from the Docker container 
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://172.17.0.2:3111/ (Press CTRL+C to quit)
+02/23/2023, 08:33:59, Metrics Endpoint request is succcess.
+172.17.0.1 - - [23/Feb/2023 08:34:32] "GET /metrics HTTP/1.1" 200 -
+02/23/2023, 08:33:59, Healthz Endpoint request is succcess
+172.17.0.1 - - [23/Feb/2023 08:34:37] "GET /healthz HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:34:41] "GET / HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:34:41] "GET /static/css/main.css HTTP/1.1" 304 -
+02/23/2023, 08:33:59, About Us page is retrieved!
+172.17.0.1 - - [23/Feb/2023 08:38:38] "GET /about HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:38:38] "GET /static/css/main.css HTTP/1.1" 304 -
+172.17.0.1 - - [23/Feb/2023 08:38:40] "GET / HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:38:40] "GET /static/css/main.css HTTP/1.1" 304 -
+02/23/2023, 08:33:59, Article "KubeCon + CloudNativeCon 2021" retrieved!
+172.17.0.1 - - [23/Feb/2023 08:38:41] "GET /2 HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:38:41] "GET /static/css/main.css HTTP/1.1" 304 -
+172.17.0.1 - - [23/Feb/2023 08:38:42] "GET /create HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:38:42] "GET /static/css/main.css HTTP/1.1" 304 -
+02/23/2023, 08:33:59, New Article "Udacity Learning" is created!
+172.17.0.1 - - [23/Feb/2023 08:38:51] "POST /create HTTP/1.1" 302 -
+172.17.0.1 - - [23/Feb/2023 08:38:51] "GET / HTTP/1.1" 200 -
+172.17.0.1 - - [23/Feb/2023 08:38:51] "GET /static/css/main.css HTTP/1.1" 304 -
