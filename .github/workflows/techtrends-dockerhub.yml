@@ -1,3 +1,4 @@
+# GitHub Actions Name
 name: TechTrends - Package with Docker
 
 on:
