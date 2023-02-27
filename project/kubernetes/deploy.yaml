@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: techtrends
-        tag: alpine
+        tag: latest
     spec:
       containers:
       - image: masrayie/techtrends:latest
